@@ -1,196 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #222;
-            font-family: Arial, sans-serif;
-        }
+  <style>
+    .button-gap {
+      margin-bottom: 19px;
+      width: 200px;
+      height: 40px;
+      display: inline-block;
+      margin-right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
 
-        .game-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            border: 2px solid #ddd;
-        }
+    .button-gap:hover {
+      background-color: #45a049;
+    }
+    
+    .image-gap {
+      width: 200px;
+      height: 200px;
+      display: inline-block;
+      margin-right: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-        .snake {
-            width: 20px;
-            height: 20px;
-            background-color: #0f0;
-            position: absolute;
-            transition: 0.1s;
-        }
+    .gap {
+      margin-bottom: 20px;
+    }
 
-        .food {
-            width: 20px;
-            height: 20px;
-            background-color: #f00;
-            position: absolute;
-            transition: 0.1s;
-        }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1CB5E0 10%, #000851 100%);
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
 
-        .game-over {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: #fff;
-            display: none;
-        }
+    h1 {
+      font-size: 6vw;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
 
-        .score {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-            color: #fff;
-        }
-    </style>
+    .warning {
+      font-size: 18px;
+      color: red;
+      margin-bottom: 10px;
+    }
+
+    .version {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="snake" id="snake"></div>
-        <div class="food" id="food"></div>
-        <div class="game-over" id="game-over">Game Over! Score: <span id="score">0</span></div>
-        <div class="score">Score: <span id="current-score">0</span></div>
-    </div>
-    <script>
-        const gameContainer = document.querySelector(".game-container");
-        const snake = document.getElementById("snake");
-        const food = document.getElementById("food");
-        const gameOverScreen = document.getElementById("game-over");
-        const currentScoreElement = document.getElementById("current-score");
+  <div class="warning">Warning! This page is in beta.</div>
+  <h1>Teknik.AB Games</h1>
+  <button class="button-gap" onclick="myFunction()">Fruit Catcher</button>
+  <button class="button-gap" onclick="myOtherFunction()">Tic Tac Toe</button>
+  <button class="button-gap" onclick="myThirdFunction()">Chat game</button>
+  <button class="button-gap" onclick="myFourthFunction()">Money Game</button>
 
-        const gridSize = 20;
-        const gridSizeInPixels = 400;
-        let direction = "right";
-        let snakeBody = [{ x: 0, y: 0 }];
-        let foodPosition = { x: 0, y: 0 };
-        let score = 0;
-        let snakeSpeed = 100;
-        let gameInterval;
+  <!-- Add an image -->
+  <img src="https://i.ibb.co/h9DvQp8/IMG-2759.jpg" alt="Description of the image" class="image-gap gap">
 
-        function getRandomPosition() {
-            return Math.floor(Math.random() * gridSize) * gridSize;
-        }
+  <!-- Add an image -->
+  <img src="https://i.ibb.co/X3DJNGK/IMG-2758.jpg" alt="Description of the image" class="image-gap gap">
 
-        function updateFoodPosition() {
-            foodPosition.x = getRandomPosition();
-            foodPosition.y = getRandomPosition();
-            food.style.left = foodPosition.x + "px";
-            food.style.top = foodPosition.y + "px";
-        }
+  <!-- Add an image -->
+  <img src="https://i.ibb.co/NTbBFh8/IMG-2789.jpg" alt="Description of the image" class="image-gap gap">
 
-        function updateSnake() {
-            const head = Object.assign({}, snakeBody[0]);
+  <!-- Add an image -->
+   <img src="https://i.ibb.co/2dJ0KWd/IMG-2811.jpg" alt="Description of the image" class="image-gap gap">
 
-            switch (direction) {
-                case "up":
-                    head.y -= gridSize;
-                    break;
-                case "down":
-                    head.y += gridSize;
-                    break;
-                case "left":
-                    head.x -= gridSize;
-                    break;
-                case "right":
-                    head.x += gridSize;
-                    break;
-            }
+  <!-- Add four more buttons -->
+  <button class="button-gap" onclick="myFifthFunction()">Snake</button>
+  <button class="button-gap" onclick="mySixthFunction()">GuessTheNumber</button>
+  <button class="button-gap" onclick="mySeventhFunction()">Pixelcamera</button>
+  <button class="button-gap" onclick="myEighthFunction()">Button</button>
 
-            snakeBody.unshift(head);
+  <!-- Add four more images -->
+  <img src="https://example.com/image5.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://i.ibb.co/fFtFwSj/IMG-2777.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://i.ibb.co/RbLkHrm/IMG-2870.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image8.jpg" alt="Description of the image" class="image-gap gap">
+  
+  <!-- Add six more buttons -->
+  <button class="button-gap" onclick="myNinthFunction()">Game 9</button>
+  <button class="button-gap" onclick="myTenthFunction()">Game 10</button>
+  <button class="button-gap" onclick="myEleventhFunction()">Game 11</button>
+  <button class="button-gap" onclick="myTwelfthFunction()">Game 12</button>
+  <button class="button-gap" onclick="myThirteenthFunction()">Game 13</button>
+  <button class="button-gap" onclick="myFourteenthFunction()">Game 14</button>
+  
+  <!-- Add two more buttons -->
+  <button class="button-gap" onclick="myFifteenthFunction()">Game 15</button>
+  <button class="button-gap" onclick="mySixteenthFunction()">Game 16</button>
+  
+  <!-- Add eight more image slots -->
+  <img src="https://example.com/image17.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image18.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image19.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image20.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image21.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image22.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image23.jpg" alt="Description of the image" class="image-gap gap">
+  <img src="https://example.com/image24.jpg" alt="Description of the image" class="image-gap gap">
 
-            if (head.x === foodPosition.x && head.y === foodPosition.y) {
-                // Add a new segment to the snake when it eats food
-                const newSegment = { x: head.x, y: head.y };
-                snakeBody.unshift(newSegment);
+  <div class="version">Version 3.5</div>
 
-                // Award 1 point for each food consumed
-                score += 1;
-                currentScoreElement.textContent = score;
-                updateFoodPosition();
-                snakeSpeed -= 5;
-            } else {
-                snakeBody.pop();
-            }
+  <script>
+    // Existing functions for the first eight buttons
+    function myFunction() {
+      window.location.href = "https://askansz.github.io/the.king/";
+    }
 
-            snake.style.left = head.x + "px";
-            snake.style.top = head.y + "px";
-        }
+    function myOtherFunction() {
+      window.location.href = "https://askansz.github.io/TicTacToeGame/";
+    }
 
-        function checkCollision() {
-            const head = snakeBody[0];
-            if (
-                head.x < 0 ||
-                head.x >= gridSizeInPixels ||
-                head.y < 0 ||
-                head.y >= gridSizeInPixels
-            ) {
-                endGame();
-            }
+    function myThirdFunction() {
+      window.location.href = "https://movieboxc17.github.io/Chat_bot/";
+    }
 
-            for (let i = 1; i < snakeBody.length; i++) {
-                if (head.x === snakeBody[i].x && head.y === snakeBody[i].y) {
-                    endGame();
-                    break;
-                }
-            }
-        }
+    function myFourthFunction() {
+      window.location.href ="https://movieboxc17.github.io/Game12/";
+    }
+    
+    function myFifthFunction() {
+      window.location.href ="https://movieboxc17.github.io/Snake/";
+    }
+    
+    function mySixthFunction() {
+     window.location.href ="https://askansz.github.io/GuessTheNumber/";
+    }
+    
+    function mySeventhFunction() {
+      window.location.href ="https://movieboxc17.github.io/Test56/";
+    }
+    
+    function myEighthFunction() {
+      alert("error");
+    }
 
-        function endGame() {
-            clearInterval(gameInterval);
-            gameOverScreen.style.display = "block";
-        }
+    // Add functions for the six new buttons
+    function myNinthFunction() {
+      // Replace with the URL or action for Game 9
+      window.location.href = "https://example.com/game9";
+    }
 
-        function changeDirection(e) {
-            switch (e.key) {
-                case "w":
-                    if (direction !== "down") direction = "up";
-                    break;
-                case "s":
-                    if (direction !== "up") direction = "down";
-                    break;
-                case "a":
-                    if (direction !== "right") direction = "left";
-                    break;
-                case "d":
-                    if (direction !== "left") direction = "right";
-                    break;
-                case "Enter":
-                    if (gameOverScreen.style.display === "block") {
-                        startGame();
-                    }
-                    break;
-            }
-        }
+    function myTenthFunction() {
+      // Replace with the URL or action for Game 10
+      window.location.href = "https://example.com/game10";
+    }
 
-        function startGame() {
-            snakeBody = [{ x: 0, y: 0 }];
-            direction = "right";
-            snakeSpeed = 100;
-            score = 0;
-            currentScoreElement.textContent = score;
-            gameOverScreen.style.display = "none";
-            updateFoodPosition();
-            gameInterval = setInterval(() => {
-                updateSnake();
-                checkCollision();
-            }, snakeSpeed);
-        }
+    function myEleventhFunction() {
+      // Replace with the URL or action for Game 11
+      window.location.href = "https://example.com/game11";
+    }
 
-        document.addEventListener("keydown", changeDirection);
-        startGame();
-    </script>
+    function myTwelfthFunction() {
+      // Replace with the URL or action for Game 12
+      window.location.href = "https://example.com/game12";
+    }
+
+    function myThirteenthFunction() {
+      // Replace with the URL or action for Game 13
+      window.location.href = "https://example.com/game13";
+    }
+
+    function myFourteenthFunction() {
+      // Replace with the URL or action for Game 14
+      window.location.href = "https://example.com/game14";
+    }
+    
+    // Add functions for the two new buttons
+    function myFifteenthFunction() {
+      // Replace with the URL or action for Game 15
+      window.location.href = "https://example.com/game15";
+    }
+
+    function mySixteenthFunction() {
+      // Replace with the URL or action for Game 16
+      window.location.href = "https://example.com/game16";
+    }
+  </script>
 </body>
 </html>
