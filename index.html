@@ -34,23 +34,39 @@
             background-color: #f00;
             position: absolute;
         }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #fff;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
         <div class="snake" id="snake"></div>
         <div class="food" id="food"></div>
+        <div class="game-over" id="game-over">Game Over! Score: <span id="score">0</span></div>
     </div>
     <script>
+        const gameContainer = document.querySelector(".game-container");
         const snake = document.getElementById("snake");
         const food = document.getElementById("food");
+        const gameOverScreen = document.getElementById("game-over");
+        const scoreElement = document.getElementById("score");
 
         const gridSize = 20;
         const gridSizeInPixels = 400;
-        const snakeSpeed = 200; // milliseconds
         let direction = "right";
         let snakeBody = [{ x: 0, y: 0 }];
         let foodPosition = { x: 0, y: 0 };
+        let score = 0;
+        let snakeSpeed = 200;
+        let gameInterval;
 
         function getRandomPosition() {
             return Math.floor(Math.random() * gridSize) * gridSize;
@@ -84,7 +100,10 @@
             snakeBody.unshift(head);
 
             if (head.x === foodPosition.x && head.y === foodPosition.y) {
+                score += 10;
+                snakeSpeed -= 5;
                 updateFoodPosition();
+                scoreElement.textContent = score;
             } else {
                 snakeBody.pop();
             }
@@ -101,17 +120,20 @@
                 head.y < 0 ||
                 head.y >= gridSizeInPixels
             ) {
-                clearInterval(gameInterval);
-                alert("Game Over!");
+                endGame();
             }
 
             for (let i = 1; i < snakeBody.length; i++) {
                 if (head.x === snakeBody[i].x && head.y === snakeBody[i].y) {
-                    clearInterval(gameInterval);
-                    alert("Game Over!");
+                    endGame();
                     break;
                 }
             }
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            gameOverScreen.style.display = "block";
         }
 
         function changeDirection(e) {
@@ -128,16 +150,30 @@
                 case "d":
                     if (direction !== "left") direction = "right";
                     break;
+                case "Enter":
+                    if (gameOverScreen.style.display === "block") {
+                        startGame();
+                    }
+                    break;
             }
         }
 
-        updateFoodPosition();
-        const gameInterval = setInterval(() => {
-            updateSnake();
-            checkCollision();
-        }, snakeSpeed);
+        function startGame() {
+            snakeBody = [{ x: 0, y: 0 }];
+            direction = "right";
+            snakeSpeed = 200;
+            score = 0;
+            scoreElement.textContent = score;
+            gameOverScreen.style.display = "none";
+            updateFoodPosition();
+            gameInterval = setInterval(() => {
+                updateSnake();
+                checkCollision();
+            }, snakeSpeed);
+        }
 
         document.addEventListener("keydown", changeDirection);
+        startGame();
     </script>
 </body>
 </html>
