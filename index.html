@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+        }
+
+        .game-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 2px solid #ddd;
+        }
+
+        .snake {
+            width: 20px;
+            height: 20px;
+            background-color: #0f0;
+            position: absolute;
+        }
+
+        .food {
+            width: 20px;
+            height: 20px;
+            background-color: #f00;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="snake" id="snake"></div>
+        <div class="food" id="food"></div>
+    </div>
+    <script>
+        const snake = document.getElementById("snake");
+        const food = document.getElementById("food");
+
+        const gridSize = 20;
+        const gridSizeInPixels = 400;
+        const snakeSpeed = 200; // milliseconds
+        let direction = "right";
+        let snakeBody = [{ x: 0, y: 0 }];
+        let foodPosition = { x: 0, y: 0 };
+
+        function getRandomPosition() {
+            return Math.floor(Math.random() * gridSize) * gridSize;
+        }
+
+        function updateFoodPosition() {
+            foodPosition.x = getRandomPosition();
+            foodPosition.y = getRandomPosition();
+            food.style.left = foodPosition.x + "px";
+            food.style.top = foodPosition.y + "px";
+        }
+
+        function updateSnake() {
+            const head = Object.assign({}, snakeBody[0]);
+
+            switch (direction) {
+                case "up":
+                    head.y -= gridSize;
+                    break;
+                case "down":
+                    head.y += gridSize;
+                    break;
+                case "left":
+                    head.x -= gridSize;
+                    break;
+                case "right":
+                    head.x += gridSize;
+                    break;
+            }
+
+            snakeBody.unshift(head);
+
+            if (head.x === foodPosition.x && head.y === foodPosition.y) {
+                updateFoodPosition();
+            } else {
+                snakeBody.pop();
+            }
+
+            snake.style.left = head.x + "px";
+            snake.style.top = head.y + "px";
+        }
+
+        function checkCollision() {
+            const head = snakeBody[0];
+            if (
+                head.x < 0 ||
+                head.x >= gridSizeInPixels ||
+                head.y < 0 ||
+                head.y >= gridSizeInPixels
+            ) {
+                clearInterval(gameInterval);
+                alert("Game Over!");
+            }
+
+            for (let i = 1; i < snakeBody.length; i++) {
+                if (head.x === snakeBody[i].x && head.y === snakeBody[i].y) {
+                    clearInterval(gameInterval);
+                    alert("Game Over!");
+                    break;
+                }
+            }
+        }
+
+        function changeDirection(e) {
+            switch (e.key) {
+                case "ArrowUp":
+                    if (direction !== "down") direction = "up";
+                    break;
+                case "ArrowDown":
+                    if (direction !== "up") direction = "down";
+                    break;
+                case "ArrowLeft":
+                    if (direction !== "right") direction = "left";
+                    break;
+                case "ArrowRight":
+                    if (direction !== "left") direction = "right";
+                    break;
+            }
+        }
+
+        updateFoodPosition();
+        const gameInterval = setInterval(() => {
+            updateSnake();
+            checkCollision();
+        }, snakeSpeed);
+
+        document.addEventListener("keydown", changeDirection);
+    </script>
+</body>
+</html>
